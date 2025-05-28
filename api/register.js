@@ -11,6 +11,13 @@ function saveUsers(users) {
 }
 
 export default function handler(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
@@ -19,10 +26,4 @@ export default function handler(req, res) {
     users[username] = { password, inventory: [] };
     saveUsers(users);
     res.json({ ok: true });
-    res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
 }
