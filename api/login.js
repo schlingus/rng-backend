@@ -19,5 +19,5 @@ export default async function handler(req, res) {
   if (!user || user.password !== password) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
-  res.json({ ok: true });
+  res.json({ oe: true });
 }
