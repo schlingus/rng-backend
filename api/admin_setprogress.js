@@ -1,17 +1,3 @@
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
-
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
-
 import fs from 'fs';
 
 const USERS_FILE = './users.json';
@@ -26,6 +12,12 @@ function saveUsers(users) {
 }
 
 export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+if (req.method === 'OPTIONS') {
+  res.status(200).end();
+  return;
+}
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     const { adminpass, username, inventory } = req.body;
     if (adminpass !== ADMIN_PASS) return res.status(403).json({ error: 'Forbidden' });

@@ -1,10 +1,3 @@
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
-
 import fs from 'fs';
 
 const USERS_FILE = './users.json';
@@ -26,4 +19,10 @@ export default function handler(req, res) {
     users[username] = { password, inventory: [] };
     saveUsers(users);
     res.json({ ok: true });
+    res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+if (req.method === 'OPTIONS') {
+  res.status(200).end();
+  return;
+}
 }

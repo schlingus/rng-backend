@@ -1,17 +1,3 @@
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
-
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-if (req.method === 'OPTIONS') {
-  res.status(200).end();
-  return;
-}
-
 import fs from 'fs';
 
 const USERS_FILE = './users.json';
@@ -29,4 +15,10 @@ export default function handler(req, res) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
     res.json({ inventory: users[username].inventory });
+    res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+if (req.method === 'OPTIONS') {
+  res.status(200).end();
+  return;
+}
 }
