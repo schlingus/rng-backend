@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -10,11 +10,11 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     const { username, password, inventory } = req.body;
-    const user = await kv.get(`user:${username}`);
+    const user = await Redis.get(`user:${username}`);
     if (!user || user.password !== password) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
     user.inventory = inventory;
-    await kv.set(`user:${username}`, user);
+    await Redis.set(`user:${username}`, user);
     res.json({ ok: true });
 }

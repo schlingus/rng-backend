@@ -1,4 +1,5 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
 
 const ADMIN_PASS = 'iHATEpickles1'; // Change this to your real admin password
 
@@ -14,10 +15,10 @@ export default async function handler(req, res) {
     const { adminpass, username, inventory } = req.body;
     if (adminpass !== ADMIN_PASS) return res.status(403).json({ error: 'Forbidden' });
 
-    const user = await kv.get(`user:${username}`);
+    const user = await Redis.get(`user:${username}`);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.inventory = inventory;
-    await kv.set(`user:${username}`, user);
+    await Redis.set(`user:${username}`, user);
     res.json({ ok: true });
 }
