@@ -19,10 +19,10 @@ export default async function handler(req, res) {
     const { adminpass, username, inventory } = req.body;
     if (adminpass !== ADMIN_PASS) return res.status(403).json({ error: 'Forbidden' });
 
-    const user = await Redis.get(`user:${username}`);
+    const user = await redis.get(`user:${username}`);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.inventory = inventory;
-    await Redis.set(`user:${username}`, user);
+    await redis.set(`user:${username}`, user);
     res.json({ ok: true });
 }
