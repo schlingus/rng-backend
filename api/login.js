@@ -8,16 +8,31 @@ const redis = new Redis({
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 
-  const { username, password } = req.body;
-  const user = await redis.get(`user:${username}`);
-  if (!user || user.password !== password) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
-  res.json({ oe: true });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Missing fields' });
+    }
+
+    const user = await redis.get(`user:${username}`);
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
 }
