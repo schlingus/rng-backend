@@ -10,7 +10,7 @@ function saveUsers(users) {
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'OPTIONS') {
@@ -18,11 +18,20 @@ export default function handler(req, res) {
         return;
     }
 
-    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+    if (req.method !== 'POST') {
+        res.status(405).json({ error: 'Method not allowed' });
+        return;
+    }
     const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    if (!username || !password) {
+        res.status(400).json({ error: 'Missing fields' });
+        return;
+    }
     const users = loadUsers();
-    if (users[username]) return res.status(400).json({ error: 'User exists' });
+    if (users[username]) {
+        res.status(400).json({ error: 'User exists' });
+        return;
+    }
     users[username] = { password, inventory: [] };
     saveUsers(users);
     res.json({ ok: true });
