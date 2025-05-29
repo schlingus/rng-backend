@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    res.status(200).json({ inventory: user.inventory || [] });
+    res.status(200).json({ inventory: user.inventory, rollCount: user.rollCount || [] });
   } catch (err) {
     console.error('Server error in progress.js:', err);
     res.status(500).json({ error: 'Server error' });

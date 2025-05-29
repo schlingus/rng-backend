@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { username, password, inventory } = req.body;
+    const { username, password, inventory, rollCount } = req.body;
 
     if (!username || !password || !Array.isArray(inventory)) {
       return res.status(400).json({ error: 'Missing or invalid fields' });
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     }
 
     user.inventory = inventory;
+    user.rollCount = rollCount;
     await redis.set(`user:${username}`, user);
 
     res.status(200).json({ ok: true });
