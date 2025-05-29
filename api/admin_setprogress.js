@@ -6,7 +6,7 @@ const redis = new Redis({
 });
 
 // For security, consider moving this to an environment variable instead of hardcoding!
-const ADMIN_PASS = 'iHATEpickles1';
+const ADMIN_PASS = 'andrew s. is short';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
